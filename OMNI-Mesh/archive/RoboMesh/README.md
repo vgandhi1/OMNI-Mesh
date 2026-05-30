@@ -1,7 +1,7 @@
 <div align="center">
 
 > [!IMPORTANT]
-> **ARCHIVED / LEGACY.** This project has been consolidated into **[OMNI-Mesh](../../OMNI-Mesh)**,
+> **ARCHIVED / LEGACY.** This project has been consolidated into **[OMNI-Mesh](../..)**,
 > a single polymorphic codebase that runs this domain (and the others) via the
 > `OMNI_MESH_PROFILE` environment variable. The `ROBOTICS` profile in OMNI-Mesh supersedes
 > RoboMesh. This repo is kept read-only for history and reference only — new work should

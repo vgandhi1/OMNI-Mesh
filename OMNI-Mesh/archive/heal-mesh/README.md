@@ -1,7 +1,7 @@
 <div align="center">
 
 > [!IMPORTANT]
-> **ARCHIVED / LEGACY.** This project has been consolidated into **[OMNI-Mesh](../../OMNI-Mesh)**,
+> **ARCHIVED / LEGACY.** This project has been consolidated into **[OMNI-Mesh](../..)**,
 > a single polymorphic codebase that runs this domain (and the others) via the
 > `OMNI_MESH_PROFILE` environment variable. The `HEALTH_TECH`, `COMMERCIAL`, and `CLINICAL`
 > profiles in OMNI-Mesh supersede HEAL-Mesh. This repo is kept read-only for history and

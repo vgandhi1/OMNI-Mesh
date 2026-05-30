@@ -44,6 +44,7 @@ include = ["config*", "data_platform*", "orchestration*", "streaming_gateway*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+norecursedirs = ["archive", ".venv", "frontend_cockpit"]
 filterwarnings = [
     "ignore:Delete operation did not match any records:UserWarning",
 ]
