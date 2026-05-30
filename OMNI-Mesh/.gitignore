@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.omni_mesh/
+.env
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+.dagster/

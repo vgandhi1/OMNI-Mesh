@@ -1,0 +1,8 @@
+heal_mesh_clinical:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # In production: BigQuery dataset with column-level masking policies.
+      path: "{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/warehouse/clinical.duckdb"
+      threads: 4

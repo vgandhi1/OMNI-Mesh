@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: clinical_bronze
+    description: Bronze de-identified eCRF observations exported from the Iceberg lakehouse.
+    tables:
+      - name: ecrf_observations
+        meta:
+          external_location: "read_parquet('{{ env_var('OMNI_MESH_BRONZE_PARQUET', '/tmp/omni_bronze.parquet') }}')"

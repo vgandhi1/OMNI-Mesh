@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: silver_synchronized_trajectories
+    description: |
+      Time-synchronized multimodal trajectories. Solves the asynchronous
+      500 Hz joint kinematics ↔ 30 fps camera frame alignment challenge using
+      an ASOF JOIN backed by a window-function pivot.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: episode_id
+        description: Episode identifier (PK component).
+        data_type: varchar
+        constraints:
+          - type: not_null
+      - name: camera_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+      - name: frame_index
+        data_type: bigint
+        constraints:
+          - type: not_null
+      - name: camera_ts_us
+        data_type: bigint
+        constraints:
+          - type: not_null
+      - name: video_uri
+        data_type: varchar
+      - name: max_joint_torque_nm
+        data_type: double
+      - name: avg_motor_temp_c
+        data_type: double
+      - name: failure_type_tag
+        data_type: varchar
+      - name: success_flag
+        data_type: boolean
+    tests:
+      - unique:
+          column_name: "episode_id || '/' || camera_id || '/' || frame_index"

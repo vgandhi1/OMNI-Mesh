@@ -1,0 +1,10 @@
+omni_mesh:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Per-profile DuckDB file, exported by data_platform/medallion.run_dbt.
+      path: "{{ env_var('OMNI_MESH_DBT_DUCKDB', '/tmp/omni_mesh_dbt.duckdb') }}"
+      threads: 4
+      extensions:
+        - parquet

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: silver_subscription_events
+    description: Cleansed, deduplicated, currency-normalized subscription events.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: event_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        tests: [unique, not_null]
+      - name: customer_pseudo_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        tests: [not_null]
+      - name: event_type
+        data_type: varchar
+      - name: plan
+        data_type: varchar
+      - name: amount_usd
+        data_type: double
+      - name: currency
+        data_type: varchar
+      - name: subscription_status
+        data_type: varchar
+      - name: event_ts
+        data_type: timestamp

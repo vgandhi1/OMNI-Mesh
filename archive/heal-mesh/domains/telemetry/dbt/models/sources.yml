@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: telemetry_raw
+    description: >
+      Raw wearable device events landed by the bronze ingestion job. Backed by
+      the Iceberg-managed parquet files under ``data/lakehouse/raw/telemetry/``.
+      In production this maps to the ``telemetry_domain.wearable_events_bronze``
+      Iceberg table.
+    meta:
+      domain: telemetry
+      owner: telemetry-data-product-team
+      external_location: "read_parquet('{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/lakehouse/raw/{name}/{identifier}.parquet')"
+    tables:
+      - name: wearable_events
+        identifier: wearable_events
+        meta:
+          # ``name`` placeholder is the source name; here we override.
+          external_location: "read_parquet('{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/lakehouse/raw/telemetry/wearable_events.parquet')"
+        description: Per-minute biometric events from wearable devices.
+        columns:
+          - name: patient_id
+          - name: event_ts
+          - name: heart_rate_bpm
+          - name: hrv_ms

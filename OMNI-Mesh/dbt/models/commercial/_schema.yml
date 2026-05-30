@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: silver_subscription_events
+    description: Subscription events with a lifetime-value estimate (Silver tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: timestamp
+        data_type: timestamp
+        data_tests:
+          - not_null
+      - name: customer_id_hashed
+        description: Masked customer id (keyed-HMAC surrogate from governance.mask).
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: plan_tier
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["FREE", "PRO", "ENTERPRISE"]
+      - name: region
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["NA", "EU", "APAC"]
+      - name: monthly_revenue
+        data_type: float
+      - name: tenure_months
+        data_type: integer
+      - name: churned_flag
+        data_type: boolean
+        data_tests:
+          - not_null
+      - name: lifetime_value
+        data_type: float
+
+  - name: gold_account_health
+    description: Per-plan churn & revenue rollup (Gold tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    data_tests:
+      # Gold is aggregated by plan_tier; the raw customer identifier must never leak here.
+      - no_sensitive_columns:
+          forbidden: ["customer_id_hashed", "customer_id", "email", "full_name", "customer_name"]
+    columns:
+      - name: plan_tier
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: ["FREE", "PRO", "ENTERPRISE"]
+      - name: account_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: avg_monthly_revenue
+        data_type: double
+      - name: avg_lifetime_value
+        data_type: double
+      - name: churned_count
+        data_type: hugeint
+      - name: churn_rate
+        data_type: double
+        data_tests:
+          - not_null

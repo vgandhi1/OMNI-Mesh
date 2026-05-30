@@ -1,0 +1,10 @@
+heal_mesh_telemetry:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Per-domain warehouse file. In production this becomes a Databricks /
+      # Unity Catalog connection. ``HEAL_MESH_PROJECT_ROOT`` is exported by the
+      # bootstrap scripts; falls back to the dev tree if unset.
+      path: "{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/warehouse/telemetry.duckdb"
+      threads: 4

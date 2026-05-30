@@ -1,0 +1,7 @@
+# Optional ML extras for the VLA flywheel (ROBOTICS profile).
+# Without these, OMNI-Mesh falls back to numpy/SHA-256 embeddings, stdlib tarfile
+# shards, and a plain (non-Ray) loader — everything still runs.
+torch>=2.2.0
+torchvision>=0.17.0
+webdataset>=0.2.86
+ray[data]>=2.34.0

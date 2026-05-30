@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: silver_plc_registers
+    description: PLC registers with an SLA-breach flag (Silver tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: timestamp
+        data_type: timestamp
+        data_tests:
+          - not_null
+      - name: facility_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["Texas_Giga_01", "Berlin_Giga_02"]
+      - name: register_id
+        description: Masked PLC register id (keyed-HMAC surrogate from governance.mask).
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: measured_voltage
+        data_type: float
+      - name: temperature_c
+        data_type: float
+      - name: pressure_bar
+        data_type: float
+      - name: anomaly_flag
+        data_type: boolean
+        data_tests:
+          - not_null
+      - name: sla_breach
+        data_type: boolean
+        data_tests:
+          - not_null
+
+  - name: gold_facility_health
+    description: Per-facility health rollup (Gold tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    data_tests:
+      # Gold is aggregated by facility_id; the raw register_id must never leak here.
+      - no_sensitive_columns:
+          forbidden: ["register_id"]
+    columns:
+      - name: facility_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: ["Texas_Giga_01", "Berlin_Giga_02"]
+      - name: sample_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: avg_voltage
+        data_type: double
+      - name: avg_temperature_c
+        data_type: double
+      - name: avg_pressure_bar
+        data_type: double
+      - name: anomaly_count
+        data_type: hugeint
+      - name: sla_breach_count
+        data_type: hugeint

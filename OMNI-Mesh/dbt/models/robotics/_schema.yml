@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: silver_robot_signals
+    description: Cleaned robot trajectory signals (Silver tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: timestamp
+        data_type: timestamp
+        data_tests:
+          - not_null
+      - name: robot_id
+        description: Masked robot serial (keyed-HMAC surrogate from governance.mask).
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: robot_model_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["Figure-01", "Optimus-Gen2", "Atlas-Next", "Apollo-1"]
+      - name: joint_positions
+        data_type: float[]
+      - name: peak_joint_pos
+        data_type: float
+      - name: camera_frame_uri
+        data_type: varchar
+      - name: failure_type_tag
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              values:
+                - "GRASP_FAIL"
+                - "OVER_TORQUE"
+                - "VISION_OCCLUSION"
+                - "PATH_PLAN_TIMEOUT"
+                - "MOTOR_OVERHEAT"
+                - "NO_FAILURE"
+      - name: success_flag
+        data_type: boolean
+        data_tests:
+          - not_null
+
+  - name: gold_robot_health
+    description: Per robot-model success/failure rollup (Gold tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    data_tests:
+      # Gold is aggregated by robot_model_id; the raw robot_id must never leak here.
+      - no_sensitive_columns:
+          forbidden: ["robot_id"]
+    columns:
+      - name: robot_model_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: ["Figure-01", "Optimus-Gen2", "Atlas-Next", "Apollo-1"]
+      - name: episode_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: success_count
+        data_type: hugeint
+      - name: failure_count
+        data_type: hugeint
+      - name: success_rate
+        data_type: double
+        data_tests:
+          - not_null

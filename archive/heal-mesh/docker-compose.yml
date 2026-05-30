@@ -1,0 +1,26 @@
+version: "3.9"
+
+# Optional helper - lets reviewers spin Dagster + a Grafana panel without
+# installing anything locally. The dagster service uses a slim Python image
+# and reuses the project requirements.
+services:
+  dagster:
+    image: python:3.11-slim
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    environment:
+      - HEAL_MESH_PHI_SALT=${HEAL_MESH_PHI_SALT:-replace-me-with-a-secret-from-secret-manager}
+      - DAGSTER_HOME=/workspace/.dagster
+    command: >
+      bash -lc "pip install -q -r requirements.txt &&
+                dagster dev -m orchestration.dagster.definitions -h 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./finops/dashboards:/var/lib/grafana/dashboards

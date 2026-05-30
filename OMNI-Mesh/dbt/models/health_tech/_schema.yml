@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: silver_wearable_biometrics
+    description: Wearable biometrics with physiological outliers nulled (Silver tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: timestamp
+        data_type: timestamp
+        data_tests:
+          - not_null
+      - name: patient_id_hashed
+        description: De-identified patient surrogate (keyed-HMAC; never the raw MRN/PHI).
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: heart_rate_variability
+        data_type: integer
+      - name: sleep_efficiency
+        data_type: float
+      - name: region
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["NA", "EU", "APAC"]
+
+  - name: gold_cohort_summary
+    description: De-identified per-region cohort rollup (Gold tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    data_tests:
+      # HIPAA guard: no per-patient identifier or raw PHI column may reach Gold.
+      - no_sensitive_columns:
+          forbidden:
+            - "patient_id_hashed"
+            - "patient_id"
+            - "mrn"
+            - "ssn"
+            - "dob"
+            - "email"
+            - "full_name"
+            - "patient_name"
+    columns:
+      - name: region
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: ["NA", "EU", "APAC"]
+      - name: patient_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: avg_hrv
+        data_type: double
+      - name: avg_sleep_efficiency
+        data_type: double
+      - name: low_hrv_readings
+        data_type: hugeint

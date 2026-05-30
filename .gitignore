@@ -1,0 +1,24 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Data / Runtime
+.omni_mesh/
+.dagster/
+.env
+.user.yml
+
+# dbt (any depth)
+**/dbt/target/
+**/dbt/logs/
+**/dbt/dbt_packages/

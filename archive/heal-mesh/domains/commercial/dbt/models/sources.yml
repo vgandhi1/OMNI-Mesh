@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: commercial_raw
+    description: >
+      Stripe / App Store webhook drops. In production this is the
+      ``commercial_domain.subscription_events_bronze`` Iceberg table fed by
+      Fivetran.
+    meta:
+      domain: commercial
+      owner: commercial-data-product-team
+    tables:
+      - name: subscription_events
+        meta:
+          external_location: "read_parquet('{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/lakehouse/raw/commercial/subscription_events.parquet')"
+        columns:
+          - name: event_id
+          - name: customer_pseudo_id

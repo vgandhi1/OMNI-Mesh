@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: clinical_raw
+    description: >
+      Raw eCRF rows containing PHI columns. Stored in the
+      ``clinical_domain.ecrf_patients_bronze`` Iceberg table inside the secured
+      bucket ``s3://healmesh-clinical-secure/`` (or its local equivalent).
+      Direct read access is restricted to the ``DATA_GOVERNANCE_ADMIN`` and
+      ``CLINICAL_RESEARCHER`` roles via the policies in
+      ``governance/policies/``.
+    meta:
+      domain: clinical
+      owner: clinical-data-product-team
+      pii: true
+    tables:
+      - name: ecrf_patients
+        meta:
+          external_location: "read_parquet('{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/lakehouse/raw/clinical/ecrf_patients.parquet')"
+        columns:
+          - name: patient_id
+          - name: mrn
+            description: PHI - must be masked before leaving bronze.
+          - name: email
+            description: PHI - must be masked before leaving bronze.

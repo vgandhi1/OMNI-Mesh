@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: robotics_bronze
+    description: Bronze robot signals exported from the Iceberg lakehouse.
+    tables:
+      - name: robot_signals
+        meta:
+          external_location: "read_parquet('{{ env_var('OMNI_MESH_BRONZE_PARQUET', '/tmp/omni_bronze.parquet') }}')"

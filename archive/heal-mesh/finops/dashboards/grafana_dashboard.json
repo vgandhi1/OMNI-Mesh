@@ -1,0 +1,52 @@
+{
+  "title": "HEAL-Mesh FinOps & Observability",
+  "description": "Cross-domain warehouse spend, dbt latency, and AI pipeline throughput.",
+  "schemaVersion": 39,
+  "tags": ["heal-mesh", "finops", "data-mesh"],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Estimated warehouse spend by data product (7d)",
+      "type": "barchart",
+      "targets": [
+        {
+          "datasource": "Snowflake",
+          "rawSql": "-- See finops/queries/snowflake_cost_audit.sql\nSELECT data_product, SUM(estimated_dollar_cost) AS spend FROM heal_mesh_finops.long_running_queries WHERE start_time > NOW() - INTERVAL '7 days' GROUP BY 1 ORDER BY spend DESC"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "dbt model latency by domain (p95)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": "OpenTelemetry",
+          "expr": "histogram_quantile(0.95, sum by (heal_mesh_domain, le) (rate(dbt_build_duration_seconds_bucket[5m])))"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Vector pipeline chunks/min",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "OpenTelemetry",
+          "expr": "rate(heal_mesh_vector_chunks_total[5m]) * 60"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "RAG p95 retrieval latency",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": "OpenTelemetry",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(heal_mesh_rag_query_duration_seconds_bucket[5m])))"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: silver_ecrf_observations
+    description: De-identified eCRF observations (Silver tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: timestamp
+        data_type: timestamp
+        data_tests:
+          - not_null
+      - name: patient_id_hashed
+        description: De-identified patient surrogate (keyed-HMAC; never the raw MRN/PHI).
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: study_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["ONC-204", "CARD-118", "NEU-330"]
+      - name: age_bracket
+        description: Pre-computed bracket — age is never derived from a raw birth date.
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["18-29", "30-45", "46-65", "66+"]
+      - name: region
+        data_type: varchar
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["NA", "EU", "APAC"]
+      - name: adverse_event_flag
+        data_type: boolean
+        data_tests:
+          - not_null
+
+  - name: gold_study_safety
+    description: De-identified per-study safety rollup (Gold tier, contract-enforced).
+    config:
+      contract:
+        enforced: true
+    data_tests:
+      # HIPAA guard: no per-patient identifier or raw PHI column may reach Gold.
+      - no_sensitive_columns:
+          forbidden:
+            - "patient_id_hashed"
+            - "patient_id"
+            - "mrn"
+            - "ssn"
+            - "dob"
+            - "email"
+            - "full_name"
+            - "patient_name"
+    columns:
+      - name: study_id
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              values: ["ONC-204", "CARD-118", "NEU-330"]
+      - name: patient_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: observation_count
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: adverse_event_count
+        data_type: hugeint
+      - name: adverse_event_rate
+        data_type: double

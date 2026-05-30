@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: silver_wearable_events
+    description: |
+      Cleaned, deduplicated per-minute biometric events. Outliers are coerced
+      to NULL rather than dropped so the data-quality dashboards can flag them.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: patient_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        tests: [not_null]
+      - name: device_id
+        data_type: varchar
+      - name: event_ts
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests: [not_null]
+      - name: heart_rate_bpm
+        data_type: double
+      - name: hrv_ms
+        data_type: double
+      - name: spo2_pct
+        data_type: double
+      - name: deep_sleep_min
+        data_type: double
+      - name: steps
+        data_type: bigint
+      - name: sleep_pattern_hint
+        data_type: varchar

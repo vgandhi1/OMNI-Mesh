@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: manufacturing_bronze
+    description: Bronze PLC register readings exported from the Iceberg lakehouse.
+    tables:
+      - name: plc_registers
+        meta:
+          external_location: "read_parquet('{{ env_var('OMNI_MESH_BRONZE_PARQUET', '/tmp/omni_bronze.parquet') }}')"

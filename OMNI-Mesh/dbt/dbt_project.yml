@@ -1,0 +1,17 @@
+name: omni_mesh
+version: "0.1.0"
+config-version: 2
+
+profile: omni_mesh
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# One model folder per OMNI_MESH_PROFILE; the active profile is selected at build
+# time via `--select path:models/<profile>` (see data_platform/medallion.py).
+models:
+  omni_mesh:
+    +materialized: table

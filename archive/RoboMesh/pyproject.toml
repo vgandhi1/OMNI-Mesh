@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robomesh"
+version = "0.1.0"
+description = "Federated Robotics Telemetry & Demonstration Data Mesh — local reference implementation."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "RoboMesh Maintainers" }]
+license = { text = "Apache-2.0" }
+keywords = ["iceberg", "data-mesh", "robotics", "lakehouse", "dbt", "dagster", "rag"]
+
+[project.scripts]
+robomesh = "robomesh.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["robomesh*"]
+exclude = ["tests*", "dbt_project*", "app*", "notebooks*", "data*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::UserWarning",
+]

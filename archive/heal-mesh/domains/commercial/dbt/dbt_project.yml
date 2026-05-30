@@ -1,0 +1,29 @@
+name: heal_mesh_commercial
+version: 0.1.0
+config-version: 2
+
+profile: heal_mesh_commercial
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+
+target-path: target
+clean-targets:
+  - target
+  - dbt_packages
+
+models:
+  heal_mesh_commercial:
+    +materialized: table
+    bronze:
+      +schema: commercial_bronze
+    silver:
+      +schema: commercial_silver
+      +contract:
+        enforced: true
+    gold:
+      +schema: commercial_gold
+      +contract:
+        enforced: true

@@ -1,0 +1,25 @@
+version: 2
+
+# dbt-mesh public model exposures.
+# The Commercial domain depends on telemetry.gold_patient_health_index for
+# churn-correlation analytics; the AI Readiness tier depends on it for
+# semantic serialization. Any breaking schema change must bump the major
+# contract version below.
+exposures:
+  - name: commercial_churn_correlation
+    type: analysis
+    maturity: high
+    owner:
+      name: Commercial Data Product Team
+      email: commercial-data@healmesh.example
+    depends_on:
+      - ref('gold_patient_health_index')
+
+  - name: ai_readiness_semantic_serializer
+    type: ml
+    maturity: high
+    owner:
+      name: AI Platform Team
+      email: ai-platform@healmesh.example
+    depends_on:
+      - ref('gold_patient_health_index')

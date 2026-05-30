@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: gold_customer_value
+    description: Public data product - customer CLV and churn-risk tiers.
+    access: public
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: customer_pseudo_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        tests: [unique, not_null]
+      - name: latest_plan
+        data_type: varchar
+      - name: latest_status
+        data_type: varchar
+      - name: customer_lifetime_value
+        data_type: double
+      - name: mrr_churn_risk
+        data_type: varchar
+        tests:
+          - accepted_values:
+              values: [healthy, evaluating, high_risk, churned]
+      - name: first_seen_ts
+        data_type: timestamp
+      - name: last_seen_ts
+        data_type: timestamp

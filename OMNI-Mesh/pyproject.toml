@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omni-mesh"
+version = "0.1.0"
+description = "OMNI-Mesh: universal polymorphic cyber-physical data mesh (Phase 1 backend core)."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "pyiceberg[sql-sqlite,pyarrow]>=0.7.1",
+    "pyarrow>=15.0.0,<18",
+    "duckdb>=1.1.0",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "chromadb>=0.5.0",
+    "sentence-transformers>=3.0.0",
+    "langchain-text-splitters>=0.2.0",
+    "dbt-core>=1.8,<1.10",
+    "dbt-duckdb>=1.8,<1.10",
+    "dagster>=1.8,<1.12",
+    "dagster-webserver>=1.8,<1.12",
+    "starlette>=0.37",
+    "uvicorn>=0.29",
+    "websockets>=12.0",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "python-dotenv>=1.0.0",
+    "faker>=25.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "pytest-cov>=5.0.0"]
+
+[project.scripts]
+omni-mesh = "cli:app"
+
+[tool.setuptools]
+py-modules = ["cli"]
+
+[tool.setuptools.packages.find]
+include = ["config*", "data_platform*", "orchestration*", "streaming_gateway*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore:Delete operation did not match any records:UserWarning",
+]

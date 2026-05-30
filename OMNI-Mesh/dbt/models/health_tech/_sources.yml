@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: health_bronze
+    description: Bronze wearable biometrics exported from the Iceberg lakehouse.
+    tables:
+      - name: wearable_biometrics
+        meta:
+          external_location: "read_parquet('{{ env_var('OMNI_MESH_BRONZE_PARQUET', '/tmp/omni_bronze.parquet') }}')"
