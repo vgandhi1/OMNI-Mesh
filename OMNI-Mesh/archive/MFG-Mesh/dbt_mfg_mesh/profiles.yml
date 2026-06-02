@@ -1,7 +1,0 @@
-mfg_mesh:
-  target: dev
-  outputs:
-    dev:
-      type: duckdb
-      path: "{{ env_var('MFG_MESH_DBT_DUCKDB', '../.mfg_mesh/dbt.duckdb') }}"
-      threads: 2
