@@ -1,4 +1,9 @@
-export type MeshProfile = "ROBOTICS" | "MANUFACTURING" | "HEALTH_TECH";
+export type MeshProfile =
+  | "ROBOTICS"
+  | "MANUFACTURING"
+  | "HEALTH_TECH"
+  | "COMMERCIAL"
+  | "CLINICAL";
 
 export type HardwareStatus =
   | "AUTONOMOUS"

@@ -8,6 +8,8 @@ while keeping the operator synchronized. The aggregation adapts to the profile:
     ROBOTICS       -> peak (max)  actuator torque
     MANUFACTURING  -> mean        bus-line voltage
     HEALTH_TECH    -> mean        heart-rate variability
+    COMMERCIAL     -> mean        monthly revenue
+    CLINICAL       -> mean        adverse-event rate
 """
 
 from __future__ import annotations
@@ -33,10 +35,13 @@ SAMPLES_PER_FRAME = max(1, round(HF_HZ / RENDER_HZ))  # ~17 high-freq samples pe
 FRAME_INTERVAL_S = 1.0 / RENDER_HZ
 
 # profile -> (metric label, aggregation mode)
+_DEFAULT_METRIC = ("mean_signal", "mean")
 _PROFILE_METRIC = {
     MeshProfile.ROBOTICS: ("peak_torque_nm", "max"),
     MeshProfile.MANUFACTURING: ("mean_voltage_v", "mean"),
     MeshProfile.HEALTH_TECH: ("mean_hrv_ms", "mean"),
+    MeshProfile.COMMERCIAL: ("mean_monthly_revenue", "mean"),
+    MeshProfile.CLINICAL: ("mean_adverse_event_rate", "mean"),
 }
 
 # profile -> ordered (namespace, table, column) candidates for the HF signal.
@@ -49,6 +54,14 @@ _SIGNAL_SOURCES = {
     MeshProfile.HEALTH_TECH: [
         ("silver", "silver_wearable_biometrics", "heart_rate_variability"),
         ("bronze", "wearable_biometrics", "heart_rate_variability"),
+    ],
+    MeshProfile.COMMERCIAL: [
+        ("silver", "silver_subscription_events", "monthly_revenue"),
+        ("bronze", "subscription_events", "monthly_revenue"),
+    ],
+    MeshProfile.CLINICAL: [
+        ("silver", "silver_ecrf_observations", "adverse_event_flag"),
+        ("bronze", "ecrf_observations", "adverse_event_flag"),
     ],
 }
 
@@ -63,7 +76,7 @@ class SlidingWindowBuffer:
         self._points.append(float(value))
 
     def process_frame(self, profile: MeshProfile) -> dict:
-        label, mode = _PROFILE_METRIC[profile]
+        label, mode = _PROFILE_METRIC.get(profile, _DEFAULT_METRIC)
         if not self._points:
             return {
                 "profile": profile.value,
@@ -134,7 +147,7 @@ async def _health(request) -> JSONResponse:
 
 async def _profile(request) -> JSONResponse:
     profile = get_active_profile()
-    label, mode = _PROFILE_METRIC[profile]
+    label, mode = _PROFILE_METRIC.get(profile, _DEFAULT_METRIC)
     return JSONResponse(
         {
             "profile": profile.value,

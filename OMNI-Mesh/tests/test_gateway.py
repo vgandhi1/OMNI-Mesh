@@ -1,5 +1,6 @@
 """Streaming gateway tests: downsample math + profile labels + live WebSocket frame."""
 
+import pytest
 from starlette.testclient import TestClient
 
 from config.profiles import MeshProfile
@@ -23,6 +24,16 @@ def test_manufacturing_downsamples_with_mean():
     frame = build_frame(MeshProfile.MANUFACTURING, [10.0, 20.0])
     assert frame["metric_value"] == 15.0
     assert frame["label"] == "mean_voltage_v"
+
+
+@pytest.mark.parametrize("profile", list(MeshProfile))
+def test_every_profile_builds_a_labeled_frame(profile):
+    # Locks the gateway in lockstep with the registry: every MeshProfile must
+    # produce a non-empty metric label so a new profile can never KeyError.
+    frame = build_frame(profile, [1.0, 2.0, 3.0])
+    assert frame["profile"] == profile.value
+    assert frame["label"]
+    assert frame["sample_count"] == 3
 
 
 def test_empty_window_is_idle():
