@@ -1,8 +1,0 @@
-heal_mesh_commercial:
-  target: dev
-  outputs:
-    dev:
-      type: duckdb
-      # In production: Snowflake.
-      path: "{{ env_var('HEAL_MESH_PROJECT_ROOT', '.') }}/data/warehouse/commercial.duckdb"
-      threads: 4
