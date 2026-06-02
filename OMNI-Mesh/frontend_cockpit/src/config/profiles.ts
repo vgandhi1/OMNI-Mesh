@@ -23,10 +23,22 @@ export const PROFILE_UI: Record<MeshProfile, ProfileUi> = {
     gaugeLabel: "Mean Heart-Rate Variability (ms)",
     accent: "#34d399",
   },
+  COMMERCIAL: {
+    panelTitle: "Subscription Revenue & Churn Monitor",
+    gaugeLabel: "Mean Monthly Revenue ($)",
+    accent: "#a78bfa",
+  },
+  CLINICAL: {
+    panelTitle: "De-identified eCRF Safety Monitor",
+    gaugeLabel: "Mean Adverse-Event Rate",
+    accent: "#f472b6",
+  },
 };
 
 export const PROFILES: MeshProfile[] = [
   "ROBOTICS",
   "MANUFACTURING",
   "HEALTH_TECH",
+  "COMMERCIAL",
+  "CLINICAL",
 ];

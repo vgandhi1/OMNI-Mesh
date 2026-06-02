@@ -11,7 +11,7 @@
 [![dbt](https://img.shields.io/badge/dbt-contracts_enforced-FF694B?logo=dbt&logoColor=white)](https://www.getdbt.com/)
 [![Dagster](https://img.shields.io/badge/Dagster-assets-654FF0?logo=dagster&logoColor=white)](https://dagster.io/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Tests](https://img.shields.io/badge/tests-48_passing-3FB950)](#-testing)
+[![Tests](https://img.shields.io/badge/tests-53_passing-3FB950)](#-testing)
 
 </div>
 
@@ -114,8 +114,8 @@ OMNI-Mesh/
 ├── frontend_cockpit/        # React 18 + Vite + TS + Zustand + Recharts operator cockpit
 ├── cli.py                   # unified `omni-mesh` Typer CLI
 ├── tests/                   # isolation + contract suite (conftest purges every cache)
-├── archive/                 # 📦 MFG-Mesh · RoboMesh · heal-mesh (read-only predecessors)
-└── OMNI-Mesh.md             # full reference architecture
+├── docs/                    # ARCHITECTURE.md (reference architecture) + reviews/
+└── archive/                 # 📦 MFG-Mesh · RoboMesh · heal-mesh (read-only predecessors)
 ```
 
 ## 🧩 Capabilities by layer
@@ -164,7 +164,7 @@ The **React 18** cockpit consumes that WebSocket; panel titles, gauge labels, an
 ## 🧪 Testing
 
 ```bash
-pytest -q       # 48 passing
+pytest -q       # 53 passing
 ```
 
 Covers fail-closed salt handling, the Iceberg TOCTOU race-lost path, per-profile schema conformance, word-boundary RAG extraction (so `EU` never matches `revenue`), the full medallion build for all five profiles, and the no-PHI-in-Gold contract guard.
@@ -176,5 +176,5 @@ Covers fail-closed salt handling, the Iceberg TOCTOU race-lost path, per-profile
 ---
 
 <div align="center">
-<sub>📖 Full reference architecture: <a href="./OMNI-Mesh.md">OMNI-Mesh.md</a></sub>
+<sub>📖 Full reference architecture: <a href="./docs/ARCHITECTURE.md">docs/ARCHITECTURE.md</a></sub>
 </div>
